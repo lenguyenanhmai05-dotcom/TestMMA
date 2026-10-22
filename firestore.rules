@@ -42,7 +42,7 @@ service cloud.firestore {
 
     match /books/{bookId} {
       // 1. Only logged-in users can read their own books; visitors cannot read anything
-      allow read: if isAuthenticated() && resource.data.userId == request.auth.uid;
+      allow read: if isAuthenticated() && (resource == null || resource.data.userId == request.auth.uid);
       
       // 2. Reject if userId is not the logged-in user, or if invalid data (length, enum, etc.)
       allow create: if isAuthenticated() 

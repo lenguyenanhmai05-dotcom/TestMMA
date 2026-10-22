@@ -7,8 +7,7 @@ import {
   setDoc, 
   doc, 
   updateDoc, 
-  deleteDoc, 
-  getDoc 
+  deleteDoc 
 } from 'firebase/firestore';
 import { db, isFirebaseConfigured } from '../config/firebase';
 import { useAuth } from './AuthContext';
@@ -111,14 +110,6 @@ export const BooksProvider = ({ children }) => {
     const bookRef = doc(db, 'books', docId);
 
     try {
-      // Also check Firestore directly in case of race condition
-      const existingSnap = await getDoc(bookRef);
-      if (existingSnap.exists()) {
-        const err = new Error('A book with this title and author already exists in your bookshelf.');
-        setErrorBook(err.message);
-        throw err;
-      }
-
       const newBook = {
         id: docId,
         userId: user.uid,
